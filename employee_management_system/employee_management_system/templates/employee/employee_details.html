@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><b>FirstName</b></td>
+            <td>{{ user.first_name }}</td>
+        </tr>
+        <tr>
+            <td><b>LastName</b></td>
+            <td>{{ user.last_name }}</td>
+        </tr>
+        <tr>
+            <td><b>Email</b></td>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <td><b>Designation</b></td>
+            <td>{{ user.profile.designation }}</td>
+        </tr>
+        <tr>
+            <td><b>Salary</b></td>
+            <td>{{ user.profile.salary }}</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock content %}

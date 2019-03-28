@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p>
+        <div class="float-left"><h3>List of {{title}}</h3></div>
+        <a class="btn btn-primary float-right" href="{% url 'employee_add' %}">Add Employee</a>
+    </p>
+    {% if users %}
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            {% for user in users %}
+            <tbody>
+                <tr>
+                    <td><b>{{ user.first_name }}</b> &nbsp; {{ user.email }}</td>
+                    <td style="text-align:center;">
+                        <a class="btn btn-info" href="{% url 'employee_details' user.id %}">Details</a>
+                        <a class="btn btn-warning" href="{% url 'employee_update' user.id %}">Update</a>
+                        <a class="btn btn-danger" href="{% url 'employee_delete' user.id %}">Delete</>
+                    </td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No</p>
+    {% endif %}
+{% endblock content %}
