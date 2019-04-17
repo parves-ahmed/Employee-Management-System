@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from .models import *
 
 # Create your views here.
@@ -36,11 +37,11 @@ def poll(request, id=None):
         return render(request, 'poll/poll.html', context)
 
     if request.method == "POST":
-        user_id = 1
+        user_id = 8
         data = request.POST
         ret = Answer.objects.create(user_id=user_id, choice_id=data['choice'])
         if ret:
-            return HttpResponse("success")
+            return HttpResponseRedirect(reverse('polls'))
         else:
             return HttpResponse("Failed")
 

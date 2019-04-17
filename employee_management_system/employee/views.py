@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .forms import userform
+from .forms import UserForm
 from .models import *
+from employee_management_system.decorators import admin_hr_required, admin_only
 
 # Create your views here.
 
@@ -42,6 +42,7 @@ def user_logout(request):
 
 @login_required(login_url='login/')
 def employee_list(request):
+    print(request.role)
     context = {}
     context['users'] = User.objects.all()
     context['title'] = 'Employees'
@@ -56,16 +57,19 @@ def employee_details(request, id):
 
 
 @login_required(login_url='login/')
+@admin_only
 def employee_add(request):
     if request.method == "POST":
-        user_form = userform(request.POST)
+        user_form = UserForm(request.POST)
         if user_form.is_valid():
-            user_form.save()
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
             return HttpResponseRedirect(reverse('employee_list'))
         else:
             return render(request, 'employee/employee_add.html', {'user_form': user_form})
     else:
-        user_form = userform()
+        user_form = UserForm()
         return render(request, 'employee/employee_add.html', {'user_form': user_form})
 
 
@@ -73,14 +77,16 @@ def employee_add(request):
 def employee_update(request, id=None):
     user = get_object_or_404(User, id=id)
     if request.method == "POST":
-        user_form = userform(request.POST, instance=user)
+        user_form = UserForm(request.POST, instance=user)
         if user_form.is_valid():
-            user_form.save()
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
             return HttpResponseRedirect(reverse('employee_list'))
         else:
             return render(request, 'employee/employee_update.html', {'user_form': user_form})
     else:
-        user_form = userform(instance=user)
+        user_form = UserForm(instance=user)
         return render(request, 'employee/employee_update.html', {'user_form': user_form})
 
 
