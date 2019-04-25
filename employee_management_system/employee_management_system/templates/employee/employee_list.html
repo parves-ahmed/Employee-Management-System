@@ -1,34 +1,60 @@
 {% extends 'base.html' %}
+{% load poll_extras %}
 
 {% block content %}
-    <p>
+<div class="row" xmlns="http://www.w3.org/1999/html">
+    <div class="col-md-8">
+        <p>
         <div class="float-left"><h3>List of {{title}}</h3></div>
         {% if request.role == "Admin" %}
-            <a class="btn btn-primary float-right" href="{% url 'employee_add' %}">Add Employee</a>
+        <a class="btn btn-primary float-right" href="{% url 'employee_add' %}">Add Employee</a>
         {% endif %}
-</p>
-    {% if users %}
+        </p>
+        {% if users %}
         <table class="table table-bordered">
             <thead class="thead-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>Action</th>
-                </tr>
+            <tr>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
             </thead>
             {% for user in users %}
             <tbody>
-                <tr>
-                    <td><b>{{ user.first_name }}</b> &nbsp; {{ user.email }}</td>
-                    <td style="text-align:center;">
-                        <a class="btn btn-info" href="{% url 'employee_details' user.id %}">Details</a>
-                        <a class="btn btn-warning" href="{% url 'employee_update' user.id %}">Update</a>
-                        <a class="btn btn-danger" href="{% url 'employee_delete' user.id %}">Delete</>
-                    </td>
-                </tr>
+            <tr>
+                <td><b>{{ user.first_name }}</b> &nbsp; {{ user.email }}</td>
+                <td style="text-align:center;">
+                    <a class="btn btn-info" href="{% url 'employee_details' user.id %}">Details</a>
+                    <a class="btn btn-warning" href="{% url 'employee_update' user.id %}">Update</a>
+                    <a class="btn btn-danger" href="{% url 'employee_delete' user.id %}">Delete</>
+                </td>
+            </tr>
             </tbody>
             {% endfor %}
         </table>
-    {% else %}
+        {% else %}
         <p>No</p>
-    {% endif %}
+        {% endif %}
+
+    </div>
+    <div class="col-md-4">
+        {% recent_polls as questions %}
+        <p>
+            <h2>Recent Polls</h2>
+        </p>
+        {% if questions %}
+        <div class="list-group">
+            {% for question in questions %}
+            <a class="list-group-item" href="{% url 'poll_detail' question.id %}"> {{ question.title }}</a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>There is no question available</p>
+
+        {% endif %}
+
+        {% if request.role == "HR" or request.role == "Admin"%}
+            <a href="{% url 'my_polls' %}"><i>(see your post)</i></a>
+        {% endif %}
+    </div>
+</div>
 {% endblock content %}

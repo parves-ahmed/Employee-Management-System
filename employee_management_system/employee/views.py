@@ -2,7 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
+from django.views.generic import DetailView
+from django.views.generic.edit import UpdateView
+from django.urls import reverse, reverse_lazy
 from .forms import UserForm
 from .models import *
 from employee_management_system.decorators import admin_hr_required, admin_only
@@ -100,3 +102,19 @@ def employee_delete(request, id=None):
         context = {}
         context['user'] = user
         return render(request, 'employee/employee_delete.html', context)
+
+
+class ProfileUpdate(UpdateView):
+    fields = ['designation', 'salary']
+    template_name = 'auth/profile_update.html'
+    success_url = reverse_lazy('my_profile')
+
+    def get_object(self):
+        return self.request.user.profile
+
+
+class MyProfile(DetailView):
+    template_name = 'auth/profile.html'
+
+    def get_object(self):
+        return self.request.user.profile

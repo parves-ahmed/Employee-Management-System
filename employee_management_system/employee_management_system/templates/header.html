@@ -1,3 +1,4 @@
+{% load poll_extras %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">EMS</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,7 +10,7 @@
         <a class="nav-link" href="{% url 'employee_list' %}">Employee</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'polls' %}">Poll
+        <a class="nav-link" href="{% url 'polls' %}">{{ 'Poll' | upper }}
             <span class="badge badge-primary badge-pill"> {{ poll_count }}</span>
         </a>
 
@@ -19,7 +20,9 @@
     <div class="text-right">
         <form class="form-inline my-2 my-lg-0" method="post" action="{% url 'user_logout' %}">
             {% csrf_token %}
-            <span>{{ request.user.first_name }}</span>
+            <a href="{% url 'my_profile' %}">
+                <span>{{ request.user.first_name }}</span>
+            </a>
             <input type="submit" class="btn btn-outline-danger my-2 my-sm-0" value="Logout">
         </form>
     </div>

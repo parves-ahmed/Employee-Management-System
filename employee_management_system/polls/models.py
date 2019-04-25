@@ -47,3 +47,5 @@ class Answer(models.Model):
         return self.user.first_name + '-' + self.choice.text
 
 
+#Question.objects.filter(created_by__id=8)
+# Question.objects.filter(created_by__username="pam")
